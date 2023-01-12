@@ -1,4 +1,3 @@
-const { create } = require('domain');
 const { client, getAllUsers, createUser } = require('./index');
 
 // function should call a query which drops all tables from our db
