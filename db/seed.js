@@ -1,5 +1,5 @@
 const { create } = require('domain');
-const { client, getAllUsers } = require('./index');
+const { client, getAllUsers, createUser } = require('./index');
 
 // function should call a query which drops all tables from our db
 async function dropTables() {
@@ -35,6 +35,36 @@ async function createTables() {
   }
 }
 
+// function should attempt to create a few users
+async function createInitialUsers() {
+  try {
+    console.log(`Starting to create users...`);
+
+    const albert = await createUser({
+      username: 'albert',
+      password: 'bertie99',
+    });
+
+    const sandra = await createUser({
+      username: 'sandra',
+      password: '2sandy4me',
+    });
+
+    const glamgal = await createUser({
+      username: 'glamgal',
+      password: 'soglam',
+    });
+
+    console.log(albert);
+    console.log(sandra);
+    console.log(glamgal);
+
+    console.log(`Finished creating users...`);
+  } catch (err) {
+    console.error(err, `Error creating users!`);
+  }
+}
+
 // function should call a query which rebuilds the db
 async function rebuildDB() {
   try {
@@ -42,6 +72,7 @@ async function rebuildDB() {
 
     await dropTables();
     await createTables();
+    await createInitialUsers();
   } catch (err) {
     console.error(err);
   }
