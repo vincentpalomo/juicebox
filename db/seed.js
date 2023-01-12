@@ -4,7 +4,13 @@ const { client, getAllUsers } = require('./index');
 // function should call a query which drops all tables from our db
 async function dropTables() {
   try {
-    await client.query(`DELETE * FROM users`);
+    console.log(`Dropping tables...`);
+
+    await client.query(`
+    DROP TABLE users
+    `);
+
+    console.log(`Finished dropping tables...`);
   } catch (err) {
     console.error(err, `Error dropping tables!`);
   }
@@ -13,10 +19,17 @@ async function dropTables() {
 // function should call a query which creates all tables for our db
 async function createTables() {
   try {
+    console.log(`Creating tables...`);
+
     await client.query(`
-    INSERT users (id, username, password) 
-    VALUES ($1, $2, $3)
-    RETURNING *`);
+    CREATE TABLE users (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL
+    );
+    `);
+
+    console.log(`Finished creating tables...`);
   } catch (err) {
     console.error(err, `Error building tables!`);
   }
