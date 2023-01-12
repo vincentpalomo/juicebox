@@ -17,7 +17,7 @@ const { client, getAllUsers } = require('./index');
 // function should call a query which drops all tables from our db
 async function dropTables() {
   try {
-    await client.query(`DELETE * FROM users`);
+    await client.query(`DROP DATABASE users`);
   } catch (err) {
     console.error(err);
   }
@@ -26,10 +26,7 @@ async function dropTables() {
 // function should call a query which creates all tables for our db
 async function createTables() {
   try {
-    await client.query(`
-    INSERT users (id, username, password) 
-    VALUES ($1, $2, $3)
-    RETURNING *`);
+    await client.query(``);
   } catch (err) {
     console.error(err);
   }
