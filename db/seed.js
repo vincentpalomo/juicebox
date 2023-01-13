@@ -1,4 +1,13 @@
-const { client, getAllUsers, createUser } = require('./index');
+const {
+  client,
+  getAllUsers,
+  createUser,
+  updateUser,
+  getAllPosts,
+  updatePost,
+  createPost,
+  getUserById,
+} = require('./index');
 
 const testusers = {
   name: 'john',
@@ -11,7 +20,8 @@ async function dropTables() {
     console.log(`Dropping tables...`);
 
     await client.query(`
-    DROP TABLE users
+    DROP TABLE IF EXISTS posts;
+    DROP TABLE users;
     `);
 
     console.log(`Finished dropping tables...`);
@@ -32,6 +42,13 @@ async function createTables() {
       password VARCHAR(255) NOT NULL,
       name VARCHAR(255) NOT NULL,
       location VARCHAR(255) NOT NULL,
+      active BOOLEAN DEFAULT true
+    );
+    CREATE TABLE posts (
+      id SERIAL PRIMARY KEY,
+      "authorId" INTEGER REFERENCES users(id) NOT NULL,
+      title VARCHAR(255) NOT NULL,
+      content TEXT NOT NULL,
       active BOOLEAN DEFAULT true
     );
     `);
@@ -78,32 +95,19 @@ async function createInitialUsers() {
   }
 }
 
-// function to update the user profile
-async function updateUser(id, fields = {}) {
-  // build the set string
-  const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(', ');
-
-  // return early if this is called without fields
-  if (setString.length === 0) {
-    return;
-  }
-
+// function should attempt to create a few posts
+async function createInitialPosts() {
   try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `
-      UPDATE users
-      SET ${setString}
-      WHERE id=${id}
-      RETURNING *;
-    `,
-      Object.values(fields)
-    );
+    const [albert, sandra, glamgal] = await getAllUsers();
 
-    return user;
+    await createPost({
+      authorId: albert.id,
+      title: 'First Post',
+      content:
+        'This is my first post. I hope I love writing blogs as much as I love writing them.',
+    });
+
+    // a couple more
   } catch (error) {
     throw error;
   }
@@ -117,6 +121,7 @@ async function rebuildDB() {
     await dropTables();
     await createTables();
     await createInitialUsers();
+    await createInitialPosts();
   } catch (err) {
     console.error(err);
   }
@@ -136,6 +141,21 @@ async function testDB() {
       location: 'Lesterville, KY',
     });
     console.log(`Result:`, updateUserResult);
+
+    console.log('Calling getAllPosts');
+    const posts = await getAllPosts();
+    console.log('Result:', posts);
+
+    console.log('Calling updatePost on posts[0]');
+    const updatePostResult = await updatePost(posts[0].id, {
+      title: 'New Title',
+      content: 'Updated Content',
+    });
+    console.log('Result:', updatePostResult);
+
+    console.log('Calling getUserById with 1');
+    const albert = await getUserById(1);
+    console.log('Result:', albert);
 
     console.log(`Finished database tests!`);
   } catch (err) {
