@@ -14,7 +14,9 @@ async function getAllUsers() {
 // create user
 async function createUser({ username, password, name, location }) {
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [user],
+    } = await client.query(
       `
     INSERT INTO users (username, password, name, location)
     VALUES ($1, $2, $3, $4)
@@ -23,7 +25,7 @@ async function createUser({ username, password, name, location }) {
     `,
       [username, password, name, location]
     );
-    return rows;
+    return user;
   } catch (err) {
     console.error(err);
   }
@@ -63,7 +65,7 @@ async function updateUser(id, fields = {}) {
 // get all posts
 async function getAllPosts() {
   const { rows } = await client.query(
-    `SELECT id
+    `SELECT *
     FROM posts;`
   );
   return rows;
@@ -72,7 +74,9 @@ async function getAllPosts() {
 // create post
 async function createPost({ authorId, title, content }) {
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [post],
+    } = await client.query(
       `
     INSERT INTO posts ("authorId", title, content)
     VALUES ($1, $2, $3)
@@ -80,7 +84,7 @@ async function createPost({ authorId, title, content }) {
     `,
       [authorId, title, content]
     );
-    return rows;
+    return post;
   } catch (err) {
     console.error(err);
   }
@@ -133,35 +137,23 @@ async function getPostsByUser(userId) {
 
 // get user by id
 async function getUserById(userId) {
-  // first get the user (NOTE: Remember the query returns
-  // (1) an object that contains
-  // (2) a `rows` array that (in this case) will contain
-  // (3) one object, which is our user.
-  // if it doesn't exist (if there are no `rows` or `rows.length`), return null
   try {
-    const { rows } = await client.query(
-      `
-      SELECT * FROM users
+    const {
+      rows: [user],
+    } = await client.query(`
+      SELECT id, username, name, location, active
+      FROM users
       WHERE id = ${userId}
-    `
-    );
-    console.log('rows', rows);
-    if (!rows || !rows.length) {
+    `);
+    console.log('user', user);
+    if (!user || !user.length) {
       return null;
     }
-    const user = rows[0];
-    delete user.password;
-    const posts = await getPostsByUser(userId);
-    user.posts = posts;
+    user.posts = await getPostsByUser(userId);
     return user;
   } catch (err) {
     console.error(err);
   }
-  // if it does:
-  // delete the 'password' key from the returned object
-  // get their posts (use getPostsByUser)
-  // then add the posts to the user object with key 'posts'
-  // return the user object
 }
 
 module.exports = {

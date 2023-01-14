@@ -9,11 +9,6 @@ const {
   getUserById,
 } = require('./index');
 
-const testusers = {
-  name: 'john',
-  location: 'usa',
-};
-
 // function should call a query which drops all tables from our db
 async function dropTables() {
   try {
@@ -110,6 +105,7 @@ async function createInitialPosts() {
   try {
     const [albert, sandra, glamgal] = await getAllUsers();
 
+    console.log(`Starting to create posts...`);
     await createPost({
       authorId: albert.id,
       title: 'First Post',
@@ -129,9 +125,9 @@ async function createInitialPosts() {
       content: 'Do you even? I swear that half of you are posing.',
     });
 
-    // a couple more
+    console.log(`Finished creatiing posts!`);
   } catch (error) {
-    throw error;
+    console.error(err, `Error creating posts...`);
   }
 }
 
