@@ -173,6 +173,18 @@ async function createTags(tagList) {
   try {
     // insert the tags, doing nothing on conflict
     // returning nothing, we'll query after
+    const tag = await client.query(`
+    INSERT INTO tags(name)
+    VALUES (${insertValues})
+    `);
+
+    const rows = await client.query(`
+    SELECT * 
+    FROM tags
+    WHERE name IN (${selectValues})
+    `);
+
+    return rows;
     // select all tags where the name is in our taglist
     // return the rows from the query
   } catch (error) {
