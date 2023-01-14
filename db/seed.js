@@ -31,7 +31,6 @@ async function dropTables() {
 async function createTables() {
   try {
     console.log(`Creating tables...`);
-
     await client.query(`
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
@@ -53,8 +52,8 @@ async function createTables() {
       name VARCHAR(255) UNIQUE NOT NULL
     );
     CREATE TABLE post_tags (
-      "postId" INTEGER REFERENCES posts(id),
-      "tagId" INTEGER REFERENCES tags(id)
+      "postId" INTEGER REFERENCES posts(id) UNIQUE,
+      "tagId" INTEGER REFERENCES tags(id) UNIQUE
     );
     `);
 
