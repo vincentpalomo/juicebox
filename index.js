@@ -1,7 +1,17 @@
 const express = require('express');
 const server = express();
 
+const { client } = require('./db');
+client.connect();
+
 const PORT = 3000;
+
+const morgan = require('morgan');
+server.use(morgan('dev'));
+server.use(express.json());
+
+const apiRouter = require('./api');
+server.use('/api', apiRouter);
 
 server.use((req, res, next) => {
   console.log('<____Body Logger START____>');
@@ -11,12 +21,12 @@ server.use((req, res, next) => {
   next();
 });
 
-app.get('/api', (req, res, next) => {
+server.get('/api', (req, res, next) => {
   console.log('A get request was made to /api');
   res.send({ message: 'success' });
 });
 
-app.post('/api', (req, res, next) => {
+server.post('/api', (req, res, next) => {
   console.log('A request was made to /api');
   next();
 });
