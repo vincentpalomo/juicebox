@@ -5,12 +5,14 @@ const jwt = require('jsonwebtoken');
 
 const { getAllUsers, getUserByUsername, createUser } = require('../db');
 
+// logging request to /user
 userRouter.use((req, res, next) => {
   console.log('A request is being made to /users');
 
   next();
 });
 
+// get all users
 userRouter.get('/', async (req, res) => {
   const users = await getAllUsers();
 
@@ -19,10 +21,11 @@ userRouter.get('/', async (req, res) => {
   });
 });
 
+// login user
 userRouter.post('/login', async (req, res, next) => {
-  const { id, username, password } = req.body;
+  const { username, password } = req.body;
 
-  const token = jwt.sign({ id, username }, process.env.JWT_SECRET);
+  const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
   if (!username || !password) {
     next({
@@ -48,6 +51,7 @@ userRouter.post('/login', async (req, res, next) => {
   }
 });
 
+// register user
 userRouter.post('/register', async (req, res, next) => {
   const { username, password, name, location } = req.body;
 
