@@ -3,9 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const server = express();
 
-const { client } = require('./db');
-client.connect();
-
 const PORT = 3000;
 
 const morgan = require('morgan');
@@ -23,15 +20,18 @@ server.use((req, res, next) => {
   next();
 });
 
-server.get('/api', (req, res, next) => {
-  console.log('A get request was made to /api');
-  res.send({ message: 'success' });
-});
+// server.get('/api', (req, res, next) => {
+//   console.log('A get request was made to /api');
+//   res.send({ message: 'success' });
+// });
 
-server.post('/api', (req, res, next) => {
-  console.log('A request was made to /api');
-  next();
-});
+// server.use('/api', (req, res, next) => {
+//   console.log('A request was made to /api');
+//   next();
+// });
+
+const { client } = require('./db');
+client.connect();
 
 server.listen(PORT, () => {
   console.log(`The server is running on: http://localhost:${PORT}`);

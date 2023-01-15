@@ -1,3 +1,4 @@
 node_modules
 juicebox-dev.sql
 .env
+commands.sql

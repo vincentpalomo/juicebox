@@ -23,8 +23,8 @@ async function dropTables() {
     `);
 
     console.log(`Finished dropping tables...`);
-  } catch (err) {
-    console.error(err, `Error dropping tables!`);
+  } catch (error) {
+    console.error(error, `Error dropping tables!`);
   }
 }
 
@@ -60,8 +60,8 @@ async function createTables() {
     `);
 
     console.log(`Finished creating tables...`);
-  } catch (err) {
-    console.error(err, `Error building tables!`);
+  } catch (error) {
+    console.error(error, `Error building tables!`);
   }
 }
 
@@ -96,8 +96,8 @@ async function createInitialUsers() {
     console.log(glamgal);
 
     console.log(`Finished creating users...`);
-  } catch (err) {
-    console.error(err, `Error creating users!`);
+  } catch (error) {
+    console.error(error, `Error creating users!`);
   }
 }
 
@@ -169,8 +169,8 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialPosts();
     // await createInitialTags();
-  } catch (err) {
-    console.error(err, `Error during rebuildDB`);
+  } catch (error) {
+    console.error(error, `Error during rebuildDB`);
   }
 }
 
@@ -216,8 +216,8 @@ async function testDB() {
     console.log('Result:', postsWithHappy);
 
     console.log(`Finished database tests!`);
-  } catch (err) {
-    console.error(err, `Error testing database!`);
+  } catch (error) {
+    console.error(error, `Error testing database!`);
   }
 }
 

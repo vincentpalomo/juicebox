@@ -26,8 +26,8 @@ async function createUser({ username, password, name, location }) {
       [username, password, name, location]
     );
     return user;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -97,8 +97,8 @@ async function createPost({ authorId, title, content, tags = [] }) {
     const tagList = await createTags(tags);
 
     return await addTagsToPost(post.id, tagList);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -194,8 +194,8 @@ async function getUserById(userId) {
     }
     user.posts = await getPostsByUser(userId);
     return user;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -229,8 +229,8 @@ async function createTags(tagList) {
       tagList
     );
     return rows;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -245,8 +245,8 @@ async function createPostTag(postId, tagId) {
     `,
       [postId, tagId]
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -260,8 +260,8 @@ async function addTagsToPost(postId, tagList) {
     await Promise.all(createPostTagPromises);
 
     return await getPostById(postId);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -306,8 +306,8 @@ async function getPostById(postId) {
     delete post.authorId;
 
     return post;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -354,8 +354,8 @@ async function getUserByUsername(username) {
     );
 
     return user;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    throw error;
   }
 }
 
