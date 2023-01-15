@@ -9,6 +9,9 @@ const morgan = require('morgan');
 server.use(morgan('dev'));
 server.use(express.json());
 
+const { client } = require('./db');
+client.connect();
+
 const apiRouter = require('./api');
 server.use('/api', apiRouter);
 
@@ -29,9 +32,6 @@ server.use((req, res, next) => {
 //   console.log('A request was made to /api');
 //   next();
 // });
-
-const { client } = require('./db');
-client.connect();
 
 server.listen(PORT, () => {
   console.log(`The server is running on: http://localhost:${PORT}`);
