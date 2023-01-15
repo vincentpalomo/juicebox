@@ -10,42 +10,12 @@ const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
 
-// old
-// apiRouter.use(async (req, res, next) => {
-//   const prefix = 'Bearer ';
-//   const auth = req.header('Authorization');
-
-//   if (!auth) {
-//     next();
-//   } else if (auth.startsWith(prefix)) {
-//     const token = auth.slice(prefix.length);
-
-//     try {
-//       const { id } = jwt.verify(token, JWT_SECRET);
-
-//       if (id) {
-//         req.user = await getUserById(id);
-//         next();
-//       }
-//     } catch ({ name, message }) {
-//       next({ name, message });
-//     }
-//   } else {
-//     next({
-//       name: 'AuthorizationHeaderError',
-//       message: `Authorization token must start with ${prefix}`,
-//     });
-//   }
-// });
-
-// testing copy paste
-// set `req.user` if possible
+// Checking Authorization
 apiRouter.use(async (req, res, next) => {
   const prefix = 'Bearer ';
   const auth = req.header('Authorization');
 
   if (!auth) {
-    // nothing to see here
     next();
   } else if (auth.startsWith(prefix)) {
     const token = auth.slice(prefix.length);
@@ -81,8 +51,8 @@ apiRouter.use('/users', userRouter);
 apiRouter.use('/posts', postRouter);
 apiRouter.use('/tags', tagRouter);
 
+// error handler
 apiRouter.use((error, req, res, next) => {
-  res.status(404);
   res.send({
     name: error.name,
     message: error.message,
