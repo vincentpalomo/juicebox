@@ -1,6 +1,10 @@
 const express = require('express');
 const apiRouter = express.Router();
 
+const userRouter = require('./users');
+const postRouter = require('./posts');
+const tagRouter = require('./tags');
+
 // json web token
 const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
@@ -64,6 +68,7 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
+// logging set user
 apiRouter.use((req, res, next) => {
   if (req.user) {
     console.log('User is set:', req.user);
@@ -71,16 +76,13 @@ apiRouter.use((req, res, next) => {
   next();
 });
 
-const userRouter = require('./users');
+// attach routers
 apiRouter.use('/users', userRouter);
-
-const postRouter = require('./posts');
 apiRouter.use('/posts', postRouter);
-
-const tagRouter = require('./tags');
 apiRouter.use('/tags', tagRouter);
 
 apiRouter.use((error, req, res, next) => {
+  res.status(404);
   res.send({
     name: error.name,
     message: error.message,
