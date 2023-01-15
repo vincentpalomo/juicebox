@@ -3,10 +3,9 @@ const postRouter = express.Router();
 
 const { requireUser } = require('./utils');
 const { getAllPosts } = require('../db');
-const { post } = require('./users');
 
 postRouter.post('/', requireUser, async (req, res, next) => {
-  res.send({ message: 'Under construction ' });
+  res.send({ message: 'Under construction' });
 });
 
 postRouter.use((req, res, next) => {
