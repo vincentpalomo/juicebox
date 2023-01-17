@@ -1,21 +1,19 @@
 require('dotenv').config();
-console.log(process.env.JWT_SECRET);
 
 const express = require('express');
 const server = express();
+const morgan = require('morgan');
+const { client } = require('./db');
+const apiRouter = require('./api');
 
 const PORT = 3000;
 
-const morgan = require('morgan');
+// morgan middleware
+
 server.use(morgan('dev'));
 server.use(express.json());
 
-const { client } = require('./db');
-client.connect();
-
-const apiRouter = require('./api');
-server.use('/api', apiRouter);
-
+// req.body logger
 server.use((req, res, next) => {
   console.log('<____Body Logger START____>');
   console.log(req.body);
@@ -24,16 +22,13 @@ server.use((req, res, next) => {
   next();
 });
 
-// server.get('/api', (req, res, next) => {
-//   console.log('A get request was made to /api');
-//   res.send({ message: 'success' });
-// });
+// Router
+server.use('/api', apiRouter);
 
-// server.use('/api', (req, res, next) => {
-//   console.log('A request was made to /api');
-//   next();
-// });
+// Connect to postgreSQL DB
+client.connect();
 
+// Listener
 server.listen(PORT, () => {
   console.log(`The server is running on: http://localhost:${PORT}`);
 });
