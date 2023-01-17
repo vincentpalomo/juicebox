@@ -5,6 +5,14 @@ const { requireUser } = require('./utils');
 const { getAllPosts } = require('../db');
 
 postRouter.post('/', requireUser, async (req, res, next) => {
+  const { title, content, tags = '' } = req.body;
+
+  const tagArr = tag.trim().split(/\s+/);
+  const postData = {};
+
+  if (tagArr.length) {
+    postData.tags = tagArr;
+  }
   res.send({ message: 'Under construction' });
 });
 
