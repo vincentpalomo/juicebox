@@ -1,3 +1,4 @@
+// Checking for req.user being set
 function requireUser(req, res, next) {
   if (!req.user) {
     next({

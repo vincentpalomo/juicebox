@@ -1,37 +1,28 @@
 const express = require('express');
 const postRouter = express.Router();
 
-const { requireUser } = require('./utils');
 const { getAllPosts } = require('../db');
+const { requireUser } = require('./utils');
 
-// postRouter.post('/', requireUser, async (req, res, next) => {
-//   const { title, content, tags = '' } = req.body;
-
-//   const tagArr = tag.trim().split(/\s+/);
-//   const postData = {};
-
-//   if (tagArr.length) {
-//     postData.tags = tagArr;
-//   }
-//   res.send({ message: 'Under construction' });
-// });
-
-postRouter.post('/', requireUser, async (req, res, next) => {
-  res.send({ message: 'under construction' });
-});
-
+// post logger
 postRouter.use((req, res, next) => {
   console.log('A request is being made to /posts');
 
   next();
 });
 
+// get all posts
 postRouter.get('/', async (req, res) => {
   const posts = await getAllPosts();
 
   res.send({
     posts,
   });
+});
+
+// post with requireUser
+postRouter.post('/', requireUser, async (req, res, next) => {
+  res.send({ message: 'under construction' });
 });
 
 module.exports = postRouter;
