@@ -11,11 +11,6 @@ postRouter.use((req, res, next) => {
   next();
 });
 
-// post with requireUser
-postRouter.post('/', requireUser, async (req, res, next) => {
-  res.send({ message: 'under construction' });
-});
-
 // get all posts
 postRouter.get('/', async (req, res) => {
   const posts = await getAllPosts();
@@ -23,6 +18,11 @@ postRouter.get('/', async (req, res) => {
   res.send({
     posts,
   });
+});
+
+// post with requireUser
+postRouter.post('/', requireUser, async (req, res, next) => {
+  res.send({ message: 'under construction' });
 });
 
 module.exports = postRouter;
