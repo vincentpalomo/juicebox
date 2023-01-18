@@ -1,5 +1,6 @@
 const { Client } = require('pg');
 
+// connect to postgreSQL
 const client = new Client('postgres://localhost:5432/juicebox-dev');
 
 // get all users
