@@ -194,7 +194,7 @@ async function getUserById(userId) {
     `,
       [userId]
     );
-    if (!user || !user.length) {
+    if (!user) {
       return null;
     }
 
