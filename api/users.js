@@ -1,6 +1,13 @@
 const express = require('express');
 const userRouter = express.Router();
-const { getAllUsers, getUserByUsername, createUser } = require('../db');
+const {
+  getAllUsers,
+  getUserByUsername,
+  createUser,
+  getUserById,
+  updateUser,
+} = require('../db');
+const { requireUser } = require('./utils');
 const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
@@ -90,6 +97,24 @@ userRouter.post('/register', async (req, res, next) => {
       message: 'thank you for signing up',
       token,
     });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
+// delete user
+userRouter.delete('/:userId', requireUser, async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    console.log('userid', userId);
+    const user = await getUserById(userId);
+    console.log('user', user.id);
+
+    if (user && user.id === req.user.id) {
+      console.log('userid', user.id);
+      const deletedUser = await updateUser(user.id, { active: false });
+      res.send({ user: deletedUser });
+    }
   } catch ({ name, message }) {
     next({ name, message });
   }
