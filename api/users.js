@@ -123,4 +123,19 @@ userRouter.delete('/:userId', requireUser, async (req, res, next) => {
   }
 });
 
+// update user (toggle active)
+userRouter.patch('/:userId', requireUser, async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const user = await getUserById(userId);
+
+    if (user && user.id === req.user.id) {
+      const activateUser = await updateUser(user.id, { active: true });
+      res.send({ user: activateUser });
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
 module.exports = userRouter;
