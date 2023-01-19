@@ -101,7 +101,17 @@ postRouter.delete('/:postId', requireUser, async (req, res, next) => {
 
 // get all posts
 postRouter.get('/', async (req, res) => {
-  const posts = await getAllPosts();
+  const allPosts = await getAllPosts();
+
+  const posts = allPosts.filter((post) => {
+    if (post.active) {
+      return true;
+    }
+    if (req.user && post.author.id === req.user.id) {
+      return true;
+    }
+    return false;
+  });
 
   res.send({
     posts,
