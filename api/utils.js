@@ -10,6 +10,18 @@ function requireUser(req, res, next) {
   next();
 }
 
+//check if user is active
+function requireActiveUser(req, res, next) {
+  if (!req.user.active) {
+    next({
+      name: 'UserNotActiveError',
+      message: 'Current user is not active',
+    });
+  }
+  next();
+}
+
 module.exports = {
   requireUser,
+  requireActiveUser,
 };
