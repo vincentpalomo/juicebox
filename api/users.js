@@ -21,7 +21,13 @@ userRouter.use((req, res, next) => {
 
 // get all users
 userRouter.get('/', async (req, res) => {
-  const users = await getAllUsers();
+  const allUsers = await getAllUsers();
+
+  const users = allUsers.filter((user) => {
+    if (user.active) {
+      return true;
+    }
+  });
 
   res.send({
     users,

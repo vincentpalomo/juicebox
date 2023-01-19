@@ -34,4 +34,5 @@ tagRouter.get('/:tagName/posts', async (req, res, next) => {
     next({ name, message });
   }
 });
+
 module.exports = tagRouter;
