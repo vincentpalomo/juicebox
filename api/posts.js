@@ -74,16 +74,11 @@ postRouter.patch('/:postId', requireUser, async (req, res, next) => {
 // Delete/Deactivate post with requireUser
 postRouter.delete('/:postId', requireUser, async (req, res, next) => {
   try {
-    // const post = await getPostById(req.params.postId);
-    // console.log('delete', post);
     const postId = req.params.postId;
-    console.log('delete', postId);
-
     const post = await getPostById(postId);
-    console.log('delete:post', post);
 
     if (post && post.author.id === req.user.id) {
-      const updatedPost = updatePost(post.id, { active: false });
+      const updatedPost = await updatePost(post.id, { active: false });
 
       res.send({ post: updatedPost });
     } else {
