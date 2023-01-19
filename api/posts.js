@@ -104,7 +104,7 @@ postRouter.get('/', async (req, res) => {
   const allPosts = await getAllPosts();
 
   const posts = allPosts.filter((post) => {
-    if (post.active) {
+    if (post.active && post.author.active) {
       return true;
     }
     if (req.user && post.author.id === req.user.id) {
