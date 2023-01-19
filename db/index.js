@@ -217,8 +217,6 @@ async function createTags(tagList) {
     return;
   }
 
-  const { name } = tagList;
-
   const insertValues = tagList.map((_, index) => `$${index + 1}`).join('), (');
   const selectValues = tagList.map((_, index) => `$${index + 1}`).join(', ');
 
