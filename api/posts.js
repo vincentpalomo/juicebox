@@ -71,6 +71,39 @@ postRouter.patch('/:postId', requireUser, async (req, res, next) => {
   }
 });
 
+// Delete/Deactivate post with requireUser
+postRouter.delete('/:postId', requireUser, async (req, res, next) => {
+  try {
+    // const post = await getPostById(req.params.postId);
+    // console.log('delete', post);
+    const postId = req.params.postId;
+    console.log('delete', postId);
+
+    const post = await getPostById(postId);
+    console.log('delete:post', post);
+
+    if (post && post.author.id === req.user.id) {
+      const updatedPost = updatePost(post.id, { active: false });
+
+      res.send({ post: updatedPost });
+    } else {
+      next(
+        post
+          ? {
+              name: 'UnauthorizedUserError',
+              message: ' You cannot delete a post which is not yours',
+            }
+          : {
+              name: 'PostNotFoundError',
+              message: 'That post does not exist',
+            }
+      );
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
 // get all posts
 postRouter.get('/', async (req, res) => {
   const posts = await getAllPosts();

@@ -4,12 +4,14 @@ const { getPostsByTagName } = require('../db/index');
 
 const { getAllTags } = require('../db');
 
+// tags logger
 tagRouter.use((req, res, next) => {
   console.log('A request is being made to /tags');
 
   next();
 });
 
+// get all tags
 tagRouter.get('/', async (req, res) => {
   const tags = await getAllTags();
 
@@ -18,6 +20,7 @@ tagRouter.get('/', async (req, res) => {
   });
 });
 
+// get to route by tagname
 tagRouter.get('/:tagName/posts', async (req, res, next) => {
   const tagName = req.params.tagName;
 
@@ -27,6 +30,5 @@ tagRouter.get('/:tagName/posts', async (req, res, next) => {
   } catch ({ name, message }) {
     next({ name, message });
   }
-  // res.send({ tagName });
 });
 module.exports = tagRouter;
