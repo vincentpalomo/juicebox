@@ -5,6 +5,7 @@ const server = express();
 const morgan = require('morgan');
 const { client } = require('./db');
 const apiRouter = require('./api');
+const cors = require('cors');
 
 const PORT = 3000;
 
@@ -39,6 +40,9 @@ server.get('/add/:first/to/:second', (req, res, next) => {
   }</h1>
   `);
 });
+
+// cors middleware
+server.use(cors());
 
 // Router
 server.use('/api', apiRouter);
