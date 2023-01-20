@@ -38,8 +38,6 @@ userRouter.get('/', async (req, res) => {
 userRouter.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
 
-  // const token = jwt.sign({ username }, process.env.JWT_SECRET);
-
   if (!username || !password) {
     next({
       name: 'MissingCredentialsError',
