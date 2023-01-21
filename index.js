@@ -9,6 +9,9 @@ const cors = require('cors');
 
 const PORT = 3000;
 
+// cors middleware
+server.use(cors());
+
 // morgan middleware
 
 server.use(morgan('dev'));
@@ -40,9 +43,6 @@ server.get('/add/:first/to/:second', (req, res, next) => {
   }</h1>
   `);
 });
-
-// cors middleware
-server.use(cors());
 
 // Router
 server.use('/api', apiRouter);
