@@ -5,8 +5,12 @@ const server = express();
 const morgan = require('morgan');
 const { client } = require('./db');
 const apiRouter = require('./api');
+const cors = require('cors');
 
 const PORT = 3000;
+
+// cors middleware
+server.use(cors());
 
 // morgan middleware
 
