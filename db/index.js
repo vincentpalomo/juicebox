@@ -9,26 +9,27 @@ const client = new Client(DATABASE_URL);
 // get all users
 async function getAllUsers() {
   const { rows } = await client.query(
-    `SELECT id, username, name, location, active
+    `SELECT id, username, name, location, active, avatar
     FROM users;`
   );
   return rows;
 }
 
 // create user
-async function createUser({ username, password, name, location, profileIMG }) {
+async function createUser({ username, password, name, location, avatar }) {
   try {
     const {
       rows: [user],
     } = await client.query(
       `
-    INSERT INTO users (username, password, name, location , profileIMG)
-    VALUES ($1, $2, $3, $4, 5)
+    INSERT INTO users (username, password, name, location, avatar)
+    VALUES ($1, $2, $3, $4, $5)
     ON CONFLICT (username) DO NOTHING
     RETURNING *;
     `,
-      [username, password, name, location, profileIMG]
+      [username, password, name, location, avatar]
     );
+
     return user;
   } catch (error) {
     console.error(error);
